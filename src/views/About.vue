@@ -1,5 +1,15 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <step2/>
 </template>
+
+<script>
+// @ is an alias to /src
+import step2 from '@/components/step2.vue'
+
+export default {
+  name: 'About',
+  components: {
+    step2
+  }
+}
+</script>
