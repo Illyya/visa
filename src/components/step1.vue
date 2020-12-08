@@ -1,6 +1,6 @@
 <template>
   <div class="application__content">
-    <p class="application__title-step">Шааг 1.</p>
+    <p class="application__title-step">Шаг 1.</p>
     <form
       name="form"
       action="#"
