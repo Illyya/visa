@@ -51,7 +51,7 @@
 
       <select5
         :selectedNationality="selectedNationality"
-        @select="optionSelect5"
+        @selectedOption="selectedOption"
       ></select5>
     </form>
     <div class="application__row row">
@@ -61,31 +61,31 @@
           <div class="cost__item-list">
             <div class="cost__item">
               <p class="cost__country cost__visa">
-                Страна: {{ this.$store.state.country }}
+                Страна: {{ this.$store.state.readyData.country }}
               </p>
               <p class="cost__kind-visa cost__visa">
-                Вид визы: {{ this.$store.state.visa }}
+                Вид визы: {{ this.$store.state.readyData.visa }}
               </p>
             </div>
             <div class="cost__item">
               <p class="cost__entry cost__visa">
-                Въезд: {{ this.$store.state.entry }}
+                Въезд: {{ this.$store.state.readyData.entry }}
               </p>
               <p class="cost__time cost__visa">
-                Время обработки: {{ this.$store.state.time }}
+                Время обработки: {{ this.$store.state.readyData.time }}
               </p>
             </div>
             <div class="cost__item">
               <p class="cost__text">Предварительная стоимость:</p>
             </div>
             <div class="cost__item">
-              <p class="cost__total">€{{ this.$store.state.total }}</p>
+              <p class="cost__total">€{{ this.$store.state.readyData.total }}</p>
             </div>
           </div>
         </div>
       </div>
       <div class="row__bottom">
-        <router-link to="/" class="btn">Вернуться</router-link>
+        <span @click="nextStep" class="btn">Вернуться</span>
         <button class="btn btn__form" type="submit" form="form1">Готово</button>
       </div>
     </div>
@@ -110,21 +110,21 @@ export default {
   },
   watch: {
     firstName: function () {
-      this.$store.state.firstName = this.firstName;
+      this.$store.state.readyData.firstName = this.firstName;
     },
     lastName: function () {
-      this.$store.state.lastName = this.lastName;
+      this.$store.state.readyData.lastName = this.lastName;
     },
     dateOfBirth: function () {
-      this.$store.state.dateOfBirth = this.dateOfBirth;
+      this.$store.state.readyData.dateOfBirth = this.dateOfBirth;
     },
     selectedNationality: function () {
-      this.$store.state.nationality = this.selectedNationality;
+      this.$store.state.readyData.nationality = this.selectedNationality;
     },
   },
   methods: {
     alert() {
-      console.log(JSON.stringify(this.$store.state));
+      console.log(JSON.stringify(this.$store.state.readyData));
     },
     firstLetter() {
       this.firstName =
@@ -134,9 +134,14 @@ export default {
       this.lastName = this.lastName[0].toUpperCase() + this.lastName.slice(1);
       this.lastNameOneLetter = this.lastName[0] + ".";
     },
-    optionSelect5(option) {
-      this.selectedNationality = option.name;
+    selectedOption(option) {      
+      if (this.$store.state.options.nationality.includes(option)) {
+        this.selectedNationality = option.name;         
+      }
     },
+    nextStep() {
+      this.$emit('nextStep')
+    }
   },
 };
 </script>

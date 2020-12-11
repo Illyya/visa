@@ -10,9 +10,9 @@
     </div>
     <div class="form__options" v-if="areOptionsVisible">
       <ul
-        v-for="option in this.$root.options.nationality"
+        v-for="option in this.$store.state.options.nationality"
         :key="option.value"
-        @click="selectOption(option)"
+        @click="selectedOption(option)"
       >
         <li class="form__option">{{ option.name }}</li>
       </ul>
@@ -30,8 +30,8 @@ export default {
     };
   },
   methods: {
-    selectOption(option) {
-      this.$emit("select", option), (this.areOptionsVisible = false);
+    selectedOption(option) {
+      this.$emit("selectedOption", option), (this.areOptionsVisible = false);
     },
     hideSelect() {
       this.areOptionsVisible = false;

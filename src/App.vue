@@ -2,14 +2,39 @@
   <div id="app">
     <div class="application">
       <div class="container">
-        <router-view />
+        <step1
+          v-if="showStep"
+          @nextStep="nextStep"
+        />
+        <step2
+          v-else 
+          @nextStep="nextStep"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import step1 from '@/components/step1.vue'
+import step2 from '@/components/step2.vue'
+
+export default {
+  components: {
+    step1,    
+    step2
+  },
+  data() {
+    return {
+      showStep: true
+    }
+  },
+  methods: {
+    nextStep() {
+      this.showStep = !this.showStep
+    }
+  }
+};
 </script>
 
 
@@ -307,6 +332,7 @@ body {
   &:hover {
     transform: translateY(3px);
     box-shadow: 0px 15px 20px #071149;
+    cursor: pointer;
   }
 }
 

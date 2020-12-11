@@ -8,12 +8,18 @@
       method="get"
       id="form1"
     >
+
       <select1
         :selectedCountry="selectedCountry"
-        @select="optionSelect1"
-      ></select1>
+        @selectedOption="selectedOption"
+      >
+      </select1>
 
-      <select2 :selectedVisa="selectedVisa" @select="optionSelect2"></select2>
+      <select2 
+        :selectedVisa="selectedVisa" 
+        @selectedOption="selectedOption"
+      >
+      </select2>
 
       <div class="form__item form__item_entry">
         <label for="entry" class="form__label">Въезд</label>
@@ -40,15 +46,19 @@
       <select3
         :selectedAmount="selectedAmount"
         :selectedId="selectedId"
-        @select="optionSelect3"
-      ></select3>
+        @selectedOption="selectedOption"
+      >
+      </select3>
 
       <select4
         :selectedTime="selectedTime"
         :selectedId="selectedId"
-        @select="optionSelect4"
-      ></select4>
+        @selectedOption="selectedOption"
+      >
+      </select4>
+
     </form>
+
     <div class="application__row row">
       <div class="row__left">
         <div class="row__cost cost">
@@ -58,9 +68,10 @@
       </div>
 
       <div class="row__right">
-        <router-link to="/about" class="btn">Продолжить</router-link>
+        <span @click="nextStep" class="btn">Продолжить</span>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -80,13 +91,13 @@ export default {
   },
   data() {
     return {
-      selectedCountry: this.$root.options.countries[0].name,
-      selectedVisa: this.$root.options.types[0].name,
-      selectedAmount: this.$root.options.try[0].name,
-      selectedTime: this.$root.options.timespent[8].name,
-      priceVisa: +this.$root.options.types[0].price.replace(/,/g, "."),
-      priceAmount: +this.$root.options.try[0].price.replace(/,/g, "."),
-      priceTime: +this.$root.options.timespent[8].price.replace(/,/g, "."),
+      selectedCountry: this.$store.state.options.countries[0].name,
+      selectedVisa: this.$store.state.options.types[0].name,
+      selectedAmount: this.$store.state.options.try[0].name,
+      selectedTime: this.$store.state.options.timespent[8].name,
+      priceVisa: +this.$store.state.options.types[0].price.replace(/,/g, "."),
+      priceAmount: +this.$store.state.options.try[0].price.replace(/,/g, "."),
+      priceTime: +this.$store.state.options.timespent[8].price.replace(/,/g, "."),
       selectedEntry: "",
       selectedExit: "",
       selectedId: "",
@@ -94,7 +105,7 @@ export default {
     };
   },
   created: function () {
-    this.selectedId = this.$root.options.countries[0].id;
+    this.selectedId = this.$store.state.options.countries[0].id;
     this.totalAmount =
       this.priceVisa +
       this.priceAmount +
@@ -124,48 +135,49 @@ export default {
         this.priceTime;       
     },
     selectedCountry: function () {
-      this.$store.state.country = this.selectedCountry;
+      this.$store.state.readyData.country = this.selectedCountry;
     },
     selectedVisa: function () {
-      this.$store.state.visa = this.selectedVisa;
+      this.$store.state.readyData.visa = this.selectedVisa;
     },
     selectedTime: function () {
-      this.$store.state.time = this.selectedTime;
+      this.$store.state.readyData.time = this.selectedTime;
     },
     selectedAmount: function () {
-      this.$store.state.amount = this.selectedAmount;
+      this.$store.state.readyData.amount = this.selectedAmount;
     },
     selectedEntry: function () {
-      this.$store.state.entry = this.selectedEntry;
+      this.$store.state.readyData.entry = this.selectedEntry;
     },
     selectedExit: function () {
-      this.$store.state.exit = this.selectedExit;
+      this.$store.state.readyData.exit = this.selectedExit;
     },
     totalAmount: function () {
-      this.$store.state.total = this.totalAmount;
+      this.$store.state.readyData.total = this.totalAmount;
     },
   },
   methods: {
-    optionSelect1(option) {
-      this.selectedCountry = option.name;
-      this.selectedId = option.id;
-    },
-    optionSelect2(option) {
-      this.selectedVisa = option.name;
-
-      this.priceVisa = +option.price.replace(/,/g, ".");
-    },
-    optionSelect3(option) {
-      this.selectedAmount = option.name;
-
-      this.priceAmount = +option.price.replace(/,/g, ".");
-      
-    },
-    optionSelect4(option) {
-      this.selectedTime = option.name;
-
-      this.priceTime = +option.price.replace(/,/g, ".");
-    },
+    selectedOption(option) {
+      if (this.$store.state.options.countries.includes(option)) {
+        this.selectedCountry = option.name;
+        this.selectedId = option.id;         
+      }
+      if (this.$store.state.options.types.includes(option)) {
+        this.selectedVisa = option.name;
+        this.priceVisa = +option.price.replace(/,/g, ".");       
+      }
+      if (this.$store.state.options.try.includes(option)) {
+        this.selectedAmount = option.name;
+        this.priceAmount = +option.price.replace(/,/g, ".");     
+      }
+      if (this.$store.state.options.timespent.includes(option)) {
+        this.selectedTime = option.name;
+        this.priceTime = +option.price.replace(/,/g, ".");
+      } 
+    },    
+    nextStep() {
+      this.$emit('nextStep')
+    }
   },
 };
 </script>

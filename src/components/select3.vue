@@ -12,11 +12,11 @@
       <ul>
         <li
           class="form__option"
-          v-for="option in this.$root.options.try.filter(
+          v-for="option in this.$store.state.options.try.filter(
             (item) => item.relative === selectedId
           )"
           :key="option.value"
-          @click="selectOption(option)"
+          @click="selectedOption(option)"
         >
           {{ option.name }}
         </li>
@@ -35,8 +35,8 @@ export default {
     };
   },
   methods: {
-    selectOption(option) {
-      this.$emit("select", option), (this.areOptionsVisible = false);
+    selectedOption(option) {
+      this.$emit("selectedOption", option), (this.areOptionsVisible = false);
     },
     hideSelect() {
       this.areOptionsVisible = false;
